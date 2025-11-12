@@ -1,0 +1,8 @@
+# G1axWhitelist Configuration
+minimum-tier-value: 5  # LT3 = 5
+kick-message: "§cYou need to be LT3+ on MCTiers or PVPTiers to join this server!\n§eCreate a ticket on our Discord: {discord}"
+whitelist-message: "<gradient:#00ff00:#00aa00>[G1ax]</gradient> <green>You've been automatically whitelisted! (Tier: {tier})</green>"
+discord-invite: "https://discord.gg/yourserver"
+enable-auto-whitelist: true
+enable-pvptiers-fallback: true
+debug-mode: false
