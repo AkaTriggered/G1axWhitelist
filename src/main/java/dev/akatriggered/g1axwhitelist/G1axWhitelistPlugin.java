@@ -1,7 +1,9 @@
 package dev.akatriggered.g1axwhitelist;
 
 import dev.akatriggered.g1axwhitelist.commands.CheckTierCommand;
+import dev.akatriggered.g1axwhitelist.commands.ReloadCommand;
 import dev.akatriggered.g1axwhitelist.database.DatabaseManager;
+import dev.akatriggered.g1axwhitelist.features.TierPlaceholder;
 import dev.akatriggered.g1axwhitelist.listeners.PlayerJoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,8 +25,15 @@ public class G1axWhitelistPlugin extends JavaPlugin {
         }
         
         getCommand("checktier").setExecutor(new CheckTierCommand(this));
+        getCommand("g1axreload").setExecutor(new ReloadCommand(this));
         
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        
+        // Register PlaceholderAPI expansion if available
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new TierPlaceholder().register();
+            getLogger().info("PlaceholderAPI integration enabled!");
+        }
         
         getLogger().info("§a  ██████╗  ██╗ █████╗ ██╗  ██╗");
         getLogger().info("§a ██╔════╝ ███║██╔══██╗╚██╗██╔╝");

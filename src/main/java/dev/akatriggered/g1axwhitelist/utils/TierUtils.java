@@ -161,13 +161,12 @@ public class TierUtils {
             reader.close();
             
             JsonObject json = JsonParser.parseString(response.toString()).getAsJsonObject();
-            JsonObject tierObject = json.getAsJsonObject("vanilla");
+            JsonObject crystalObject = json.getAsJsonObject("crystal");
             
-            if (tierObject != null) {
-                int tier = tierObject.get("tier").getAsInt();
-                int pos = tierObject.get("pos").getAsInt();
-                int tierValue = pos == 0 ? 12 - tier * 2 : 11 - tier * 2;
-                return getTierFromPVPValue(tierValue);
+            if (crystalObject != null && !crystalObject.get("tier").isJsonNull()) {
+                int tier = crystalObject.get("tier").getAsInt();
+                int pos = crystalObject.get("pos").getAsInt();
+                return getTierFromValues(tier, pos);
             }
             
             return Tier.UNRANKED;
