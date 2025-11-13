@@ -4,16 +4,24 @@ main: dev.akatriggered.g1axwhitelist.G1axWhitelistPlugin
 api-version: 1.20
 author: AkaTriggered
 description: G1ax Auto-Whitelist - Tier-based player management
+softdepend: [PlaceholderAPI]
 
 commands:
   checktier:
     description: Check a player's tier
     usage: /checktier <username>
     permission: g1axwhitelist.check
+  g1axreload:
+    description: Reload G1axWhitelist configuration
+    usage: /g1axreload
+    permission: g1axwhitelist.reload
 
 permissions:
   g1axwhitelist.check:
     description: Check player tiers
+    default: op
+  g1axwhitelist.reload:
+    description: Reload plugin configuration
     default: op
   g1axwhitelist.bypass:
     description: Bypass tier requirement

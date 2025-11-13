@@ -1,8 +1,73 @@
-# G1axWhitelist Configuration
-minimum-tier-value: 5  # LT3 = 5
-kick-message: "§cYou need to be LT3+ on MCTiers or PVPTiers to join this server!\n§eCreate a ticket on our Discord: {discord}"
-whitelist-message: "<gradient:#00ff00:#00aa00>[G1ax]</gradient> <green>You've been automatically whitelisted! (Tier: {tier})</green>"
+# ========================================
+#           G1axWhitelist Configuration
+# ========================================
+# Professional tier-based auto-whitelist system
+# Supports MCTiers and PVPTiers APIs with flexible eligibility
+
+# ========================================
+#            ELIGIBILITY SETTINGS
+# ========================================
+eligibility:
+  # Minimum tier value required for each platform
+  # Tier Values: 10=HT1, 9=LT1, 8=HT2, 7=LT2, 6=HT3, 5=LT3, 4=HT4, 3=LT4, 2=HT5, 1=LT5, 0=UNRANKED
+  # Set to 0 to disable checking for that platform
+  mctiers-minimum: 5      # 5 = LT3+ (Default server requirement)
+  pvptiers-minimum: 5     # 5 = LT3+ (Fallback requirement)
+  
+  # Require BOTH platforms to meet minimum OR allow either platform
+  # true = Player must be LT3+ on BOTH MCTiers AND PVPTiers
+  # false = Player needs LT3+ on EITHER MCTiers OR PVPTiers
+  require-both: false
+  
+  # Advanced: Specific tier whitelist (overrides minimum settings above)
+  # Use this for exclusive servers (e.g., only allow HT1-LT2 players)
+  # Leave empty to use minimum tier settings instead
+  # Example: ["HT1", "LT1", "HT2", "LT2"] = Only allow top 4 tiers
+  allowed-tiers: []
+
+# ========================================
+#              MESSAGES
+# ========================================
+messages:
+  # General kick message when player doesn't meet minimum requirements
+  # {discord} placeholder replaced with discord-invite URL
+  kick: "&c&l✘ ACCESS DENIED ✘\n&7You need to be &eLT3+&7 on MCTiers or PVPTiers!\n\n&b&l💬 Need help? Join our Discord:\n&f{discord}"
+  
+  # Kick message when require-both is enabled and player only meets one platform
+  kick-require-both: "&c&l✘ INSUFFICIENT RANK ✘\n&7You need &eLT3+&7 on &cBOTH&7 MCTiers &cAND&7 PVPTiers!\n&7Current: MCTiers &f{mctier}&7 | PVPTiers &f{pvptier}\n\n&b&l💬 Apply for manual whitelist:\n&f{discord}"
+  
+  # Kick message when player has no tier data on either platform
+  kick-no-data: "&c&l✘ NO TIER DATA ✘\n&7We couldn't find your tier on MCTiers or PVPTiers!\n&7Make sure you're ranked on at least one platform.\n\n&b&l💬 Get help on our Discord:\n&f{discord}"
+  
+  # Kick message for allowed-tiers restriction (exclusive servers)
+  kick-not-allowed: "&c&l✘ TIER NOT ALLOWED ✘\n&7Your tier &f{tier}&7 is not permitted on this server.\n&7Only specific tiers are allowed.\n\n&b&l💬 Check requirements on Discord:\n&f{discord}"
+  
+  # Welcome message for auto-whitelisted players
+  # {tier} placeholder replaced with player's best tier
+  whitelist: "&a&l✓ WELCOME TO THE SERVER! ✓\n<gradient:#00ff00:#00aa00>[G1ax]</gradient> <green>Auto-whitelisted with tier: &f{tier}</green>\n&7Enjoy your stay!"
+  
+  # Message when player joins and tab display updates
+  tier-updated: "&7Your tier has been updated in the tab list: &f{tier}"
+
+# ========================================
+#            SERVER SETTINGS
+# ========================================
+# Discord server invite for manual whitelist requests
 discord-invite: "https://discord.gg/yourserver"
-enable-auto-whitelist: true
-enable-pvptiers-fallback: true
-debug-mode: false
+
+# ========================================
+#              FEATURES
+# ========================================
+features:
+  # Enable automatic whitelisting system
+  auto-whitelist: true
+  
+  # Enable PVPTiers as fallback when MCTiers fails/unavailable
+  pvptiers-fallback: true
+  
+  # Show player tier in tab list (playername [TIER])
+  tab-tier-display: true
+  
+  # Enable debug logging for troubleshooting
+  # Shows detailed API responses and eligibility checks
+  debug-mode: false
