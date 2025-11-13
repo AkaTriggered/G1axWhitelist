@@ -230,25 +230,6 @@ mvn clean package
 ls target/g1axwhitelist-*.jar
 ```
 
-## 📈 Roadmap
-
-### 🎯 **Version 1.1**
-- [ ] Multi-gamemode tier thresholds
-- [ ] Advanced analytics dashboard
-- [ ] Custom tier weight system
-- [ ] Webhook notifications
-
-### 🎯 **Version 1.2**
-- [ ] GUI configuration interface
-- [ ] Player tier history tracking
-- [ ] Automated tier updates
-- [ ] Integration with more platforms
-
-### 🎯 **Version 2.0**
-- [ ] Web dashboard
-- [ ] API for external integrations
-- [ ] Machine learning tier predictions
-- [ ] Advanced player analytics
 
 ## 📊 Statistics
 
