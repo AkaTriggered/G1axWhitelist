@@ -30,13 +30,17 @@ public class PlayerJoinListener implements Listener {
         
         String playerName = event.getName();
         
+        var offlinePlayer = plugin.getServer().getOfflinePlayer(event.getUniqueId());
+        if (offlinePlayer.isWhitelisted() || offlinePlayer.isOp()) {
+            return;
+        }
+        
         try {
             var tier = TierUtils.requestFromAPI(playerName).get();
             int minimumTierValue = plugin.getConfig().getInt("minimum-tier-value", 5);
             
             if (tier.getValue() >= minimumTierValue) {
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
-                    var offlinePlayer = plugin.getServer().getOfflinePlayer(playerName);
                     offlinePlayer.setWhitelisted(true);
                     
                     try {
@@ -71,7 +75,6 @@ public class PlayerJoinListener implements Listener {
         
         try {
             if (plugin.getDatabaseManager().isAutoWhitelisted(player.getUniqueId().toString().replace("-", ""))) {
-                // Send welcome message with MiniMessage formatting
                 String welcomeMessage = plugin.getConfig().getString("whitelist-message", 
                     "<gradient:#00ff00:#00aa00>[G1ax]</gradient> <green>You've been automatically whitelisted!</green>");
                 
