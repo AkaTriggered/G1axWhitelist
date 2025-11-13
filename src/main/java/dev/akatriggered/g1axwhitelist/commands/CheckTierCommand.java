@@ -1,6 +1,7 @@
 package dev.akatriggered.g1axwhitelist.commands;
 
 import dev.akatriggered.g1axwhitelist.G1axWhitelistPlugin;
+import dev.akatriggered.g1axwhitelist.utils.EligibilityChecker;
 import dev.akatriggered.g1axwhitelist.utils.TierUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -32,17 +33,14 @@ public class CheckTierCommand implements CommandExecutor {
         }
         
         String username = args[0];
-        
         Component loadingMessage = miniMessage.deserialize("<yellow>Checking tier for " + username + "...");
         sender.sendMessage(loadingMessage);
         
         TierUtils.requestFromBothAPIs(username).thenAccept(result -> {
             plugin.getServer().getScheduler().runTask(plugin, () -> {
-                int minimumTierValue = plugin.getConfig().getInt("minimum-tier-value", 5);
-                boolean wouldBeWhitelisted = result.getBestTier().getValue() >= minimumTierValue;
-                
-                String statusColor = wouldBeWhitelisted ? "#00ff00" : "#ff0000";
-                String statusText = wouldBeWhitelisted ? "WOULD BE WHITELISTED" : "WOULD BE KICKED";
+                boolean eligible = EligibilityChecker.isEligible(result, plugin.getConfig());
+                String statusColor = eligible ? "#00ff00" : "#ff0000";
+                String statusText = eligible ? "ELIGIBLE" : "NOT ELIGIBLE";
                 
                 Component mcTierMsg = miniMessage.deserialize(
                     "<gradient:#00ff00:#00aa00>[G1ax]</gradient> <yellow>MCTiers:</yellow> <color:" + result.getMcTier().getColor() + ">" + result.getMcTier().getName() + "</color>"
@@ -51,19 +49,13 @@ public class CheckTierCommand implements CommandExecutor {
                     "<gradient:#00ff00:#00aa00>[G1ax]</gradient> <yellow>PVPTiers:</yellow> <color:" + result.getPvpTier().getColor() + ">" + result.getPvpTier().getName() + "</color>"
                 );
                 Component statusMsg = miniMessage.deserialize(
-                    "<gradient:#00ff00:#00aa00>[G1ax]</gradient> <white>Best Tier: <color:" + result.getBestTier().getColor() + ">" + result.getBestTier().getName() + "</color> | Status: <color:" + statusColor + ">" + statusText + "</color>"
+                    "<gradient:#00ff00:#00aa00>[G1ax]</gradient> <white>Best: <color:" + result.getBestTier().getColor() + ">" + result.getBestTier().getName() + "</color> | Status: <color:" + statusColor + ">" + statusText + "</color>"
                 );
                 
                 sender.sendMessage(mcTierMsg);
                 sender.sendMessage(pvpTierMsg);
                 sender.sendMessage(statusMsg);
             });
-        }).exceptionally(throwable -> {
-            plugin.getServer().getScheduler().runTask(plugin, () -> {
-                Component errorMessage = miniMessage.deserialize("<red>Failed to check tier for " + username + ": " + throwable.getMessage());
-                sender.sendMessage(errorMessage);
-            });
-            return null;
         });
         
         return true;
